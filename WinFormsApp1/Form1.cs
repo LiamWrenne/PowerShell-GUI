@@ -5,6 +5,7 @@ namespace WinFormsApp1
     using System.Management.Automation;
     using System.Management.Automation.Runspaces;
     using System.Text;
+    using System.Windows.Forms;
 
     public partial class Form1 : Form
     {
@@ -15,10 +16,14 @@ namespace WinFormsApp1
 
         private void Button_Click(object sender, EventArgs e)
         {
-            //string psfile = @"C:\Users\Liam_\Desktop\ps.ps1";
-            Outbox.Clear();
-            Outbox.Text = RunScript(Inbox.Text);
+            //Enables Auto Scripting
+
+            autooutbox.Clear();
+            autooutbox.Text = RunScript(box1.Text);
+            autooutbox.Text = "Auto Script Enabled";
+            textBox1.Visible = false;
         }
+
         private static string RunScript(string scriptText)
         {
             // create Powershell runspace
@@ -50,7 +55,55 @@ namespace WinFormsApp1
             foreach (PSObject psObject in results)
                 stringBuilder.AppendLine(psObject.ToString());
             return stringBuilder.ToString();
-           
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Disables Auto Scripting
+
+            autooutbox.Clear();
+            autooutbox.Text = RunScript(box2.Text);
+            autooutbox.Text = "Auto Script Disabled";
+            textBox1.Visible = true;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //Test File to test file scripting capabillties
+
+            string sfile = @"C:\Users\Liam_\Desktop\Dissertation\ps.ps1";
+            string sfile2 = @"C:\Users\Liam_\Desktop\Dissertation\psuser.ps1";
+
+            //Checking if the Tickboxes are checked
+
+            object cb1 = checkBox1.CheckState;
+            object cb2 = checkBox2.CheckState;
+            object cb3 = checkBox3.CheckState;
+            object cb4 = checkBox4.CheckState;
+            object cb5 = checkBox5.CheckState;
+
+            //If they are ticked run associated file 
+
+            if (Convert.ToString(cb1) == "Checked")
+            {
+                Outbox.Text = RunScript(sfile);
+            }
+            if (Convert.ToString(cb2) == "Checked")
+            {
+                Outbox.Text = RunScript(sfile2);
+            }
+            if (Convert.ToString(cb3) == "Checked")
+            {
+                Outbox.Text = RunScript(sfile);
+            }
+            if (Convert.ToString(cb4) == "Checked")
+            {
+                Outbox.Text = RunScript(sfile);
+            }
+            if (Convert.ToString(cb5) == "Checked")
+            {
+                Outbox.Text = RunScript(sfile);
+            }
         }
     }
 }
