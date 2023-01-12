@@ -6,27 +6,44 @@ namespace WinFormsApp1
     using System.Management.Automation.Runspaces;
     using System.Text;
     using System.Windows.Forms;
+    using System.Diagnostics;
 
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
+            this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
+        }
+
+        public void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Create an instance of the EventLog class
+            
+            EventLog WHT = new EventLog("WHT");
+            WHT.Source = "Windows Hardening Tool"; 
+            WHT.WriteEntry("The tool is closing.", EventLogEntryType.Information);
         }
 
         private void Button_Click(object sender, EventArgs e)
         {
-            //Enables Auto Scripting
+            // enables auto scripting
 
             autooutbox.Clear();
             autooutbox.Text = RunScript(box1.Text);
             autooutbox.Text = "Auto Script Enabled";
             textBox1.Visible = false;
+
+            // log auto scripting
+
+            EventLog WHT = new EventLog("WHT");
+            WHT.Source = "Windows Hardening Tool";
+            WHT.WriteEntry("Automatic Scripting Engaged", EventLogEntryType.Information);
         }
 
         private static string RunScript(string scriptText)
         {
-            // create Powershell runspace
+            // create ps runspace
 
             Runspace runspace = RunspaceFactory.CreateRunspace();
 
@@ -41,7 +58,7 @@ namespace WinFormsApp1
 
             pipeline.Commands.Add("Out-String");
 
-            // execute the script
+            // run the script
 
             Collection <PSObject> results = pipeline.Invoke();
 
@@ -49,7 +66,7 @@ namespace WinFormsApp1
 
             runspace.Close();
 
-            // convert the script result into a single string
+            // turn the script result from objedcts into one string
 
             StringBuilder stringBuilder = new();
             foreach (PSObject psObject in results)
@@ -59,22 +76,28 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Disables Auto Scripting
+            // disables Auto Scripting
 
             autooutbox.Clear();
             autooutbox.Text = RunScript(box2.Text);
             autooutbox.Text = "Auto Script Disabled";
             textBox1.Visible = true;
+
+            // log automatic scripting disabled
+
+            EventLog WHT = new EventLog("WHT");
+            WHT.Source = "Windows Hardening Tool";
+            WHT.WriteEntry("Automatic Scripting Disengaged", EventLogEntryType.Information);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //Test File to test file scripting capabillties
+            // test file to test file scripting capabillties
 
             string sfile = @"C:\Users\Liam_\Desktop\Dissertation\ps.ps1";
             string sfile2 = @"C:\Users\Liam_\Desktop\Dissertation\psuser.ps1";
 
-            //Checking if the Tickboxes are checked
+            // checking if the tickboxes are checked
 
             object cb1 = checkBox1.CheckState;
             object cb2 = checkBox2.CheckState;
@@ -82,7 +105,7 @@ namespace WinFormsApp1
             object cb4 = checkBox4.CheckState;
             object cb5 = checkBox5.CheckState;
 
-            //If they are ticked run associated file 
+            // if they are ticked run associated file 
 
             if (Convert.ToString(cb1) == "Checked")
             {
@@ -92,6 +115,9 @@ namespace WinFormsApp1
             {
                 Outbox.Text = RunScript(sfile2);
             }
+
+            // to add more .ps1 files
+
             if (Convert.ToString(cb3) == "Checked")
             {
                 Outbox.Text = RunScript(sfile);
