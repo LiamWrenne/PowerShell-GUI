@@ -7,6 +7,7 @@ namespace WinFormsApp1
     using System.Text;
     using System.Windows.Forms;
     using System.Diagnostics;
+    using System.Management;
 
     public partial class Form1 : Form
     {
@@ -129,6 +130,39 @@ namespace WinFormsApp1
             if (Convert.ToString(cb5) == "Checked")
             {
                 Outbox.Text = RunScript(sfile);
+            }
+        }
+
+        public void Form1_Load(object sender, EventArgs e)
+        {
+            // create a searcher to find the os info
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+
+            // go through the search result
+
+            foreach (ManagementObject os in searcher.Get())
+            {
+                // get the specified info
+
+                string osversion = os["Caption"].ToString() + " " + os["Version"].ToString();
+                string osarch = os["OSArchitecture"].ToString();
+                DateTime lastBootUpTime = ManagementDateTimeConverter.ToDateTime(os["LastBootUpTime"].ToString());
+                TimeSpan osup = DateTime.Now - lastBootUpTime;
+
+                // define the file path
+
+                string filename = "C:\\Users\\Liam_\\Desktop\\Dissertation\\system_report.csv";
+                using (StreamWriter sw = new StreamWriter(filename))
+                {
+                    // write the csv headers
+
+                    sw.WriteLine("Operating System, Architecture, Uptime");
+
+                    // write the os info
+
+                    sw.WriteLine(osversion + "," + osarch + "," + osup);
+                }
             }
         }
     }
