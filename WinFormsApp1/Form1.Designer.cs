@@ -45,6 +45,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.Level1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripTextBox3 = new System.Windows.Forms.ToolStripTextBox();
+            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
             this.autooutbox = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
@@ -52,26 +55,29 @@
             // 
             // Button
             // 
-            this.Button.Location = new System.Drawing.Point(1068, 74);
+            this.Button.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.Button.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button.Location = new System.Drawing.Point(1091, 88);
             this.Button.Name = "Button";
             this.Button.Size = new System.Drawing.Size(249, 39);
             this.Button.TabIndex = 0;
             this.Button.Text = "Initialize";
-            this.Button.UseVisualStyleBackColor = true;
+            this.Button.UseVisualStyleBackColor = false;
             this.Button.Click += new System.EventHandler(this.Button_Click);
             // 
             // Outbox
             // 
-            this.Outbox.Location = new System.Drawing.Point(40, 414);
+            this.Outbox.BackColor = System.Drawing.SystemColors.Info;
+            this.Outbox.Location = new System.Drawing.Point(12, 426);
             this.Outbox.Multiline = true;
             this.Outbox.Name = "Outbox";
             this.Outbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Outbox.Size = new System.Drawing.Size(1022, 308);
+            this.Outbox.Size = new System.Drawing.Size(1328, 320);
             this.Outbox.TabIndex = 1;
             // 
             // box1
             // 
-            this.box1.Location = new System.Drawing.Point(791, 29);
+            this.box1.Location = new System.Drawing.Point(814, 43);
             this.box1.Name = "box1";
             this.box1.ReadOnly = true;
             this.box1.Size = new System.Drawing.Size(526, 39);
@@ -81,7 +87,7 @@
             // 
             // box2
             // 
-            this.box2.Location = new System.Drawing.Point(791, 119);
+            this.box2.Location = new System.Drawing.Point(814, 133);
             this.box2.Name = "box2";
             this.box2.ReadOnly = true;
             this.box2.Size = new System.Drawing.Size(526, 39);
@@ -91,18 +97,20 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1068, 164);
+            this.button1.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.button1.Location = new System.Drawing.Point(1091, 178);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(249, 39);
             this.button1.TabIndex = 4;
             this.button1.Text = "Deactivate";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(845, 77);
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(868, 91);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(217, 32);
             this.label1.TabIndex = 5;
@@ -111,7 +119,9 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(845, 167);
+            this.label2.BackColor = System.Drawing.Color.DimGray;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label2.Location = new System.Drawing.Point(868, 181);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(217, 32);
             this.label2.TabIndex = 6;
@@ -179,9 +189,11 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.DimGray;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Level1ToolStripMenuItem});
+            this.Level1ToolStripMenuItem,
+            this.infoToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1352, 40);
@@ -191,21 +203,47 @@
             // Level1ToolStripMenuItem
             // 
             this.Level1ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripTextBox1});
+            this.toolStripTextBox1,
+            this.toolStripTextBox3});
             this.Level1ToolStripMenuItem.Name = "Level1ToolStripMenuItem";
-            this.Level1ToolStripMenuItem.Size = new System.Drawing.Size(216, 36);
-            this.Level1ToolStripMenuItem.Text = "Dropdown Menu";
+            this.Level1ToolStripMenuItem.Size = new System.Drawing.Size(251, 36);
+            this.Level1ToolStripMenuItem.Text = "Configuration Menu";
             // 
             // toolStripTextBox1
             // 
             this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 39);
-            this.toolStripTextBox1.Text = "Level 1";
+            this.toolStripTextBox1.ReadOnly = true;
+            this.toolStripTextBox1.Size = new System.Drawing.Size(300, 39);
+            this.toolStripTextBox1.Text = "Cyber Essentials";
+            // 
+            // toolStripTextBox3
+            // 
+            this.toolStripTextBox3.Name = "toolStripTextBox3";
+            this.toolStripTextBox3.ReadOnly = true;
+            this.toolStripTextBox3.Size = new System.Drawing.Size(300, 39);
+            this.toolStripTextBox3.Text = "IASME Governance ";
+            // 
+            // infoToolStripMenuItem
+            // 
+            this.infoToolStripMenuItem.BackColor = System.Drawing.Color.DimGray;
+            this.infoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripTextBox2});
+            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(307, 36);
+            this.infoToolStripMenuItem.Text = "Infonformation Gathering";
+            // 
+            // toolStripTextBox2
+            // 
+            this.toolStripTextBox2.Name = "toolStripTextBox2";
+            this.toolStripTextBox2.ReadOnly = true;
+            this.toolStripTextBox2.Size = new System.Drawing.Size(300, 39);
+            this.toolStripTextBox2.Text = "OS information";
+            this.toolStripTextBox2.Click += new System.EventHandler(this.toolStripTextBox2_Click);
             // 
             // autooutbox
             // 
             this.autooutbox.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.autooutbox.Location = new System.Drawing.Point(845, 241);
+            this.autooutbox.Location = new System.Drawing.Point(868, 255);
             this.autooutbox.Name = "autooutbox";
             this.autooutbox.ReadOnly = true;
             this.autooutbox.Size = new System.Drawing.Size(472, 39);
@@ -214,11 +252,12 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 43);
+            this.textBox1.BackColor = System.Drawing.Color.RosyBrown;
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(317, 304);
+            this.textBox1.Size = new System.Drawing.Size(552, 322);
             this.textBox1.TabIndex = 16;
             this.textBox1.Text = "\r\n\r\n------------------------->>\r\nPlease Allow for Automated scripting!\r\n---------" +
     "---------------->>\r\n";
@@ -228,6 +267,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(1352, 758);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.autooutbox);
@@ -249,8 +289,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Tool";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Text = "WHT";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -278,5 +317,8 @@
         private ToolStripTextBox toolStripTextBox1;
         private TextBox autooutbox;
         private TextBox textBox1;
+        private ToolStripMenuItem infoToolStripMenuItem;
+        private ToolStripTextBox toolStripTextBox2;
+        private ToolStripTextBox toolStripTextBox3;
     }
 }

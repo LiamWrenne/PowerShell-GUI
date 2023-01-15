@@ -14,15 +14,19 @@ namespace WinFormsApp1
         public Form1()
         {
             InitializeComponent();
-            this.FormClosing += new FormClosingEventHandler(Form1_FormClosing);
+
+            // ! identifies not null, avoids a warning
+            this.FormClosing += new FormClosingEventHandler(Form1_FormClosing!);
         }
 
-        public void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Create an instance of the EventLog class
-            
-            EventLog WHT = new EventLog("WHT");
-            WHT.Source = "Windows Hardening Tool"; 
+
+            EventLog WHT = new("WHT")
+            {
+                Source = "Windows Hardening Tool"
+            };
             WHT.WriteEntry("The tool is closing.", EventLogEntryType.Information);
         }
 
@@ -30,15 +34,16 @@ namespace WinFormsApp1
         {
             // enables auto scripting
 
-            autooutbox.Clear();
             autooutbox.Text = RunScript(box1.Text);
             autooutbox.Text = "Auto Script Enabled";
             textBox1.Visible = false;
 
             // log auto scripting
 
-            EventLog WHT = new EventLog("WHT");
-            WHT.Source = "Windows Hardening Tool";
+            EventLog WHT = new("WHT")
+            {
+                Source = "Windows Hardening Tool"
+            };
             WHT.WriteEntry("Automatic Scripting Engaged", EventLogEntryType.Information);
         }
 
@@ -61,7 +66,7 @@ namespace WinFormsApp1
 
             // run the script
 
-            Collection <PSObject> results = pipeline.Invoke();
+            Collection<PSObject> results = pipeline.Invoke();
 
             // close the runspace
 
@@ -79,15 +84,16 @@ namespace WinFormsApp1
         {
             // disables Auto Scripting
 
-            autooutbox.Clear();
             autooutbox.Text = RunScript(box2.Text);
             autooutbox.Text = "Auto Script Disabled";
             textBox1.Visible = true;
 
             // log automatic scripting disabled
 
-            EventLog WHT = new EventLog("WHT");
-            WHT.Source = "Windows Hardening Tool";
+            EventLog WHT = new("WHT")
+            {
+                Source = "Windows Hardening Tool"
+            };
             WHT.WriteEntry("Automatic Scripting Disengaged", EventLogEntryType.Information);
         }
 
@@ -110,59 +116,81 @@ namespace WinFormsApp1
 
             if (Convert.ToString(cb1) == "Checked")
             {
-                Outbox.Text = RunScript(sfile);
+                Outbox.Text += RunScript(sfile);
             }
             if (Convert.ToString(cb2) == "Checked")
             {
-                Outbox.Text = RunScript(sfile2);
+                Outbox.Text += RunScript(sfile2);
             }
 
             // to add more .ps1 files
 
             if (Convert.ToString(cb3) == "Checked")
             {
-                Outbox.Text = RunScript(sfile);
+
             }
             if (Convert.ToString(cb4) == "Checked")
             {
-                Outbox.Text = RunScript(sfile);
+
             }
             if (Convert.ToString(cb5) == "Checked")
             {
-                Outbox.Text = RunScript(sfile);
+
             }
         }
 
-        public void Form1_Load(object sender, EventArgs e)
+        private void toolStripTextBox2_Click(object sender, EventArgs e)
         {
-            // create a searcher to find the os info
+            DialogResult result = MessageBox.Show("Do you want to use this tool to collect info, this will be stored locally", "Confirmation", MessageBoxButtons.YesNoCancel);
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
-
-            // go through the search result
-
-            foreach (ManagementObject os in searcher.Get())
+            if (result == DialogResult.Yes)
             {
-                // get the specified info
-
-                string osversion = os["Caption"].ToString() + " " + os["Version"].ToString();
-                string osarch = os["OSArchitecture"].ToString();
-                DateTime lastBootUpTime = ManagementDateTimeConverter.ToDateTime(os["LastBootUpTime"].ToString());
-                TimeSpan osup = DateTime.Now - lastBootUpTime;
-
-                // define the file path
-
-                string filename = "C:\\Users\\Liam_\\Desktop\\Dissertation\\system_report.csv";
-                using (StreamWriter sw = new StreamWriter(filename))
+                FolderBrowserDialog folderBrowserDialog = new();
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // write the csv headers
+                    string folderPath = folderBrowserDialog.SelectedPath;
+                    char dirSeparator = Path.DirectorySeparatorChar;
+                    folderPath = folderPath.Replace('\\', dirSeparator);
+                    {
 
-                    sw.WriteLine("Operating System, Architecture, Uptime");
+                        // create a searcher to find the os info
 
-                    // write the os info
+                        ManagementObjectSearcher searcher = new("SELECT * FROM Win32_OperatingSystem");
 
-                    sw.WriteLine(osversion + "," + osarch + "," + osup);
+                        // go through the search result
+
+                        foreach (ManagementObject os in searcher.Get().Cast<ManagementObject>())
+                        {
+                            // get the specified info
+
+                            string osversion = os["Caption"].ToString() + " " + os["Version"].ToString();
+
+                            // ! avoids a null warning
+                            string osarch = os["OSArchitecture"].ToString()!;
+                            DateTime lastBootUpTime = ManagementDateTimeConverter.ToDateTime(os["LastBootUpTime"].ToString());
+                            TimeSpan osup = DateTime.Now - lastBootUpTime;
+
+                            // define the file path
+
+                            using StreamWriter sw = new(folderPath);
+                            // write the csv headers
+
+                            sw.WriteLine("Operating System, Architecture, Uptime");
+
+                            // write the os info
+
+                            sw.WriteLine(osversion + "," + osarch + "," + osup);
+                        }
+                    }
                 }
+            }
+            else if (result == DialogResult.No)
+            {
+                // Cancel
+            }
+            else
+            {
+                // Cancel
             }
         }
     }
