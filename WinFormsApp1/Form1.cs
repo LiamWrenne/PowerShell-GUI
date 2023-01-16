@@ -193,5 +193,22 @@ namespace WinFormsApp1
                 // Cancel
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Outbox.Clear();
+        }
+
+        private void toolStripTextBox4_Click(object sender, EventArgs e)
+        {
+            // advanced options
+
+            checkBox1.Visible = true;
+            checkBox2.Visible = true;
+            checkBox3.Visible = true;
+            checkBox4.Visible = true;
+            checkBox5.Visible = true;
+            button3.Visible = true;
+        }
     }
 }

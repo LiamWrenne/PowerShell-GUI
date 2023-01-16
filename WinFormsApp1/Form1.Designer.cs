@@ -50,12 +50,14 @@
             this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
             this.autooutbox = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.toolStripTextBox4 = new System.Windows.Forms.ToolStripTextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Button
             // 
-            this.Button.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.Button.BackColor = System.Drawing.SystemColors.ControlLight;
             this.Button.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Button.Location = new System.Drawing.Point(1091, 88);
             this.Button.Name = "Button";
@@ -71,6 +73,7 @@
             this.Outbox.Location = new System.Drawing.Point(12, 426);
             this.Outbox.Multiline = true;
             this.Outbox.Name = "Outbox";
+            this.Outbox.ReadOnly = true;
             this.Outbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Outbox.Size = new System.Drawing.Size(1328, 320);
             this.Outbox.TabIndex = 1;
@@ -97,7 +100,7 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.button1.Location = new System.Drawing.Point(1091, 178);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(249, 39);
@@ -119,7 +122,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.DimGray;
+            this.label2.BackColor = System.Drawing.Color.DarkGray;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label2.Location = new System.Drawing.Point(868, 181);
             this.label2.Name = "label2";
@@ -136,6 +139,7 @@
             this.checkBox1.TabIndex = 8;
             this.checkBox1.Text = "Get-Process";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.Visible = false;
             // 
             // checkBox2
             // 
@@ -146,6 +150,7 @@
             this.checkBox2.TabIndex = 9;
             this.checkBox2.Text = "Get-LocalUser";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Visible = false;
             // 
             // checkBox3
             // 
@@ -156,6 +161,7 @@
             this.checkBox3.TabIndex = 10;
             this.checkBox3.Text = "checkBox3";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.Visible = false;
             // 
             // checkBox4
             // 
@@ -166,6 +172,7 @@
             this.checkBox4.TabIndex = 11;
             this.checkBox4.Text = "checkBox4";
             this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.Visible = false;
             // 
             // checkBox5
             // 
@@ -176,6 +183,7 @@
             this.checkBox5.TabIndex = 12;
             this.checkBox5.Text = "checkBox5";
             this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkBox5.Visible = false;
             // 
             // button3
             // 
@@ -185,11 +193,12 @@
             this.button3.TabIndex = 13;
             this.button3.Text = "Run Selected Script";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.DimGray;
+            this.menuStrip1.BackColor = System.Drawing.Color.DarkGray;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Level1ToolStripMenuItem,
@@ -204,7 +213,8 @@
             // 
             this.Level1ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBox1,
-            this.toolStripTextBox3});
+            this.toolStripTextBox3,
+            this.toolStripTextBox4});
             this.Level1ToolStripMenuItem.Name = "Level1ToolStripMenuItem";
             this.Level1ToolStripMenuItem.Size = new System.Drawing.Size(251, 36);
             this.Level1ToolStripMenuItem.Text = "Configuration Menu";
@@ -225,7 +235,7 @@
             // 
             // infoToolStripMenuItem
             // 
-            this.infoToolStripMenuItem.BackColor = System.Drawing.Color.DimGray;
+            this.infoToolStripMenuItem.BackColor = System.Drawing.Color.DarkGray;
             this.infoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBox2});
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
@@ -257,18 +267,38 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(552, 322);
+            this.textBox1.Size = new System.Drawing.Size(591, 322);
             this.textBox1.TabIndex = 16;
             this.textBox1.Text = "\r\n\r\n------------------------->>\r\nPlease Allow for Automated scripting!\r\n---------" +
     "---------------->>\r\n";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.button2.Location = new System.Drawing.Point(1204, 370);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(136, 50);
+            this.button2.TabIndex = 17;
+            this.button2.Text = "Clear";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // toolStripTextBox4
+            // 
+            this.toolStripTextBox4.Name = "toolStripTextBox4";
+            this.toolStripTextBox4.ReadOnly = true;
+            this.toolStripTextBox4.Size = new System.Drawing.Size(300, 39);
+            this.toolStripTextBox4.Text = "Advanced Options";
+            this.toolStripTextBox4.Click += new System.EventHandler(this.toolStripTextBox4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DimGray;
+            this.BackColor = System.Drawing.Color.DarkGray;
             this.ClientSize = new System.Drawing.Size(1352, 758);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.autooutbox);
             this.Controls.Add(this.button3);
@@ -320,5 +350,7 @@
         private ToolStripMenuItem infoToolStripMenuItem;
         private ToolStripTextBox toolStripTextBox2;
         private ToolStripTextBox toolStripTextBox3;
+        private Button button2;
+        private ToolStripTextBox toolStripTextBox4;
     }
 }
