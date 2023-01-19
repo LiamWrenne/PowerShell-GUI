@@ -149,10 +149,8 @@ namespace WinFormsApp1
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
                     string folderPath = folderBrowserDialog.SelectedPath;
-                    char dirSeparator = Path.DirectorySeparatorChar;
-                    folderPath = folderPath.Replace('\\', dirSeparator);
-                    {
 
+                    {
                         // create a searcher to find the os info
 
                         ManagementObjectSearcher searcher = new("SELECT * FROM Win32_OperatingSystem");
@@ -161,41 +159,44 @@ namespace WinFormsApp1
 
                         foreach (ManagementObject os in searcher.Get().Cast<ManagementObject>())
                         {
-                            // get the specified info
+                            // get the info
 
                             string osversion = os["Caption"].ToString() + " " + os["Version"].ToString();
 
                             // ! avoids a null warning
+
                             string osarch = os["OSArchitecture"].ToString()!;
+
+                            // get last boot and current time to find uptime
                             DateTime lastBootUpTime = ManagementDateTimeConverter.ToDateTime(os["LastBootUpTime"].ToString());
                             TimeSpan osup = DateTime.Now - lastBootUpTime;
 
-                            // define the file path
-
                             using StreamWriter sw = new(folderPath);
+
                             // write the csv headers
 
-                            sw.WriteLine("Operating System, Architecture, Uptime");
+                            sw.WriteLine("Operating System, Architecture, Lastboot, Uptime");
 
                             // write the os info
 
-                            sw.WriteLine(osversion + "," + osarch + "," + osup);
+                            sw.WriteLine(osversion + "," + osarch + "," + lastBootUpTime + "," + osup);
                         }
                     }
                 }
             }
             else if (result == DialogResult.No)
             {
-                // Cancel
+                // cancel
             }
             else
             {
-                // Cancel
+                // cancel
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // clear text 
             Outbox.Clear();
         }
 
