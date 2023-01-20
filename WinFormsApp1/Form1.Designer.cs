@@ -59,7 +59,7 @@
             // 
             this.Button.BackColor = System.Drawing.SystemColors.ControlLight;
             this.Button.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button.Location = new System.Drawing.Point(1091, 109);
+            this.Button.Location = new System.Drawing.Point(1091, 23);
             this.Button.Name = "Button";
             this.Button.Size = new System.Drawing.Size(249, 39);
             this.Button.TabIndex = 0;
@@ -80,7 +80,7 @@
             // 
             // box1
             // 
-            this.box1.Location = new System.Drawing.Point(814, 12);
+            this.box1.Location = new System.Drawing.Point(814, 158);
             this.box1.Name = "box1";
             this.box1.ReadOnly = true;
             this.box1.Size = new System.Drawing.Size(526, 39);
@@ -90,7 +90,7 @@
             // 
             // box2
             // 
-            this.box2.Location = new System.Drawing.Point(814, 57);
+            this.box2.Location = new System.Drawing.Point(814, 203);
             this.box2.Name = "box2";
             this.box2.ReadOnly = true;
             this.box2.Size = new System.Drawing.Size(526, 39);
@@ -101,7 +101,7 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.button1.Location = new System.Drawing.Point(1091, 154);
+            this.button1.Location = new System.Drawing.Point(1091, 68);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(249, 39);
             this.button1.TabIndex = 4;
@@ -113,7 +113,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(868, 112);
+            this.label1.Location = new System.Drawing.Point(868, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(217, 32);
             this.label1.TabIndex = 5;
@@ -124,7 +124,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.DarkGray;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(868, 157);
+            this.label2.Location = new System.Drawing.Point(868, 71);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(217, 32);
             this.label2.TabIndex = 6;
@@ -261,7 +261,7 @@
             // autooutbox
             // 
             this.autooutbox.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.autooutbox.Location = new System.Drawing.Point(868, 199);
+            this.autooutbox.Location = new System.Drawing.Point(868, 115);
             this.autooutbox.Name = "autooutbox";
             this.autooutbox.ReadOnly = true;
             this.autooutbox.Size = new System.Drawing.Size(472, 39);

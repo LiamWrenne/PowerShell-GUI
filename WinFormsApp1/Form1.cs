@@ -148,6 +148,8 @@ namespace WinFormsApp1
                 FolderBrowserDialog folderBrowserDialog = new();
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
+                    // get folder path
+
                     string folderPath = folderBrowserDialog.SelectedPath;
 
                     {
@@ -168,6 +170,7 @@ namespace WinFormsApp1
                             string osarch = os["OSArchitecture"].ToString()!;
 
                             // get last boot and current time to find uptime
+
                             DateTime lastBootUpTime = ManagementDateTimeConverter.ToDateTime(os["LastBootUpTime"].ToString());
                             TimeSpan osup = DateTime.Now - lastBootUpTime;
 
