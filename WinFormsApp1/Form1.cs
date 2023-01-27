@@ -8,6 +8,8 @@ namespace WinFormsApp1
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Management;
+    using System.Reflection;
+    using System.Xml.Linq;
 
     public partial class Form1 : Form
     {
@@ -64,7 +66,7 @@ namespace WinFormsApp1
 
             pipeline.Commands.Add("Out-String");
 
-            // run the script
+            // run the script 
 
             Collection<PSObject> results = pipeline.Invoke();
 
@@ -153,37 +155,46 @@ namespace WinFormsApp1
                     string folderPath = folderBrowserDialog.SelectedPath;
 
                     {
-                        // create a searcher to find the os info
+                        // create a searcher to find the info
 
                         ManagementObjectSearcher searcher = new("SELECT * FROM Win32_OperatingSystem");
 
-                        // go through the search result
+                        // go through result
 
-                        foreach (ManagementObject os in searcher.Get().Cast<ManagementObject>())
+                        foreach (ManagementObject info in searcher.Get().Cast<ManagementObject>())
                         {
-                            // get the info
+                            // get the os info ! avoids a null warning
 
-                            string osversion = os["Caption"].ToString() + " " + os["Version"].ToString();
+                            string osversion = info["Caption"].ToString() + " " + info["Version"].ToString();
+                            string osarch = info["OSArchitecture"].ToString()!;
+                            DateTime lastbootuptime = ManagementDateTimeConverter.ToDateTime(info["LastBootUpTime"].ToString());
+                            TimeSpan osup = DateTime.Now - lastbootuptime;
 
-                            // ! avoids a null warning
+                            if (File.Exists(folderPath + "\\ WHT_OS_Report.csv"))
+                            {
 
-                            string osarch = os["OSArchitecture"].ToString()!;
+                                File.Move(folderPath + "\\ WHT_OS_Report.csv", folderPath + "\\ WHT_OS_Report_History.csv");
 
-                            // get last boot and current time to find uptime
+                                using StreamWriter sw = new(folderPath + "\\ WHT_OS_Report.csv");
 
-                            DateTime lastBootUpTime = ManagementDateTimeConverter.ToDateTime(os["LastBootUpTime"].ToString());
-                            TimeSpan osup = DateTime.Now - lastBootUpTime;
+                                sw.WriteLine("Operating System, Architecture, Up-time (Days:Hours:Minutes:Seconds)");
 
-                            using StreamWriter sw = new(folderPath);
+                                sw.WriteLine(osversion + "," + osarch + "," + osup);
+                            }
 
-                            // write the csv headers
+                            else
+                            {
+                                using StreamWriter sw = new(folderPath + "\\ WHT_OS_Report.csv");
 
-                            sw.WriteLine("Operating System, Architecture, Lastboot, Uptime");
+                                sw.WriteLine("Operating System, Architecture, Up-time (Days:Hours:Minutes:Seconds)");
 
-                            // write the os info
+                                sw.WriteLine(osversion + "," + osarch + "," + osup);
+                            }
 
-                            sw.WriteLine(osversion + "," + osarch + "," + lastBootUpTime + "," + osup);
-                        }
+                            // let the user know it has been successful
+
+                            Outbox.Text += "OS info scan complete";
+                        }                        
                     }
                 }
             }
@@ -197,7 +208,7 @@ namespace WinFormsApp1
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+private void button2_Click(object sender, EventArgs e)
         {
             // clear text 
             Outbox.Clear();
@@ -213,6 +224,95 @@ namespace WinFormsApp1
             checkBox4.Visible = true;
             checkBox5.Visible = true;
             button3.Visible = true;
+        }
+
+        private void toolStripTextBox5_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to use this tool to collect info, this will be stored locally", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+            if (result == DialogResult.Yes)
+            {
+                FolderBrowserDialog folderBrowserDialog = new();
+
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // get folder path
+
+                    string folderPath = folderBrowserDialog.SelectedPath;
+                    {
+                        // search for sytem info
+
+                        ManagementObjectSearcher syssearcher = new("SELECT * FROM Win32_ComputerSystem");
+
+                        // go through the search result
+
+                        foreach (ManagementObject info in syssearcher.Get().Cast<ManagementObject>())
+                        {
+                            // get system info ! avoids a warning
+
+                            string sysman = info["Manufacturer"].ToString()!;
+                            string mod = info["Model"].ToString()!;
+                            string name = info["Name"].ToString()!;
+                            string systype = info["SystemType"].ToString()!;
+
+                            if (File.Exists(folderPath + "\\ WHT_SYS_Report.csv"))
+                            {
+                                File.Move(folderPath + "\\ WHT_SYS_Report.csv", folderPath + "\\ WHT_SYS_Report_History.csv");
+
+                                using StreamWriter sw = new(folderPath + "\\ WHT_SYS_Report.csv");
+
+                                sw.WriteLine("Manufacturer, Model, Name, Type");
+
+                                sw.WriteLine(sysman + "," + mod + "," + name + "," + systype);
+                            }
+
+                            else
+                            {
+                                using StreamWriter sw = new(folderPath + "\\ WHT_SYS_Report.csv");
+
+                                sw.WriteLine("Manufacturer, Model, Name, Type");
+
+                                sw.WriteLine(sysman + "," + mod + "," + name + "," + systype);
+                            }
+                            Outbox.Text += "System info scan complete";
+                        }
+                    }
+                }
+                else if (result == DialogResult.No)
+                {
+                    // cancel
+                }
+                else
+                {
+                    // cancel
+                }
+            }
+        }
+
+        private void toolStripTextBox6_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to apply Windows Swcurity Baseline?", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+            if (result == DialogResult.Yes)
+            {
+                FolderBrowserDialog folderBrowserDialog = new();
+
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string baselinefolderPath = folderBrowserDialog.SelectedPath;
+                    {
+                        Outbox.Text += RunScript(baselinefolderPath + "\\Scripts" + "\\psuser.ps1");
+                    }
+                }
+            }
+            else if (result == DialogResult.No)
+            {
+                // cancel
+            }
+            else
+            {
+                // cancel
+            }
         }
     }
 }
