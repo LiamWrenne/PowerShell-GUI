@@ -207,7 +207,7 @@
             this.infoToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1352, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(1352, 40);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -219,7 +219,7 @@
             this.toolStripTextBox6,
             this.toolStripTextBox4});
             this.Level1ToolStripMenuItem.Name = "Level1ToolStripMenuItem";
-            this.Level1ToolStripMenuItem.Size = new System.Drawing.Size(251, 38);
+            this.Level1ToolStripMenuItem.Size = new System.Drawing.Size(251, 36);
             this.Level1ToolStripMenuItem.Text = "Configuration Menu";
             // 
             // toolStripTextBox1
@@ -259,7 +259,7 @@
             this.toolStripTextBox2,
             this.toolStripTextBox5});
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(307, 38);
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(307, 36);
             this.infoToolStripMenuItem.Text = "Infonformation Gathering";
             // 
             // toolStripTextBox2
@@ -291,7 +291,7 @@
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.textBox1.Location = new System.Drawing.Point(0, 158);
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
