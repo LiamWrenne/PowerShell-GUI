@@ -228,6 +228,7 @@
             this.toolStripTextBox1.ReadOnly = true;
             this.toolStripTextBox1.Size = new System.Drawing.Size(300, 39);
             this.toolStripTextBox1.Text = "Cyber Essentials";
+            this.toolStripTextBox1.Click += new System.EventHandler(this.toolStripTextBox1_Click);
             // 
             // toolStripTextBox3
             // 

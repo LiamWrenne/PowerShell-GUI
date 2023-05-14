@@ -10,6 +10,11 @@ namespace WinFormsApp1
     using System.Management;
     using System.Reflection;
     using System.Xml.Linq;
+    using System.Formats.Asn1;
+    using System.Globalization;
+    using System;
+    using System.Linq;
+    using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
     public partial class Form1 : Form
     {
@@ -170,12 +175,12 @@ namespace WinFormsApp1
                             DateTime lastbootuptime = ManagementDateTimeConverter.ToDateTime(info["LastBootUpTime"].ToString());
                             TimeSpan osup = DateTime.Now - lastbootuptime;
 
-                            if (File.Exists(folderPath + "\\ WHT_OS_Report.csv"))
+                            if (File.Exists(folderPath + "\\WHT_OS_Report.csv"))
                             {
 
-                                File.Move(folderPath + "\\ WHT_OS_Report.csv", folderPath + "\\ WHT_OS_Report_History.csv");
+                                File.Move(folderPath + "\\WHT_OS_Report.csv", folderPath + "\\WHT_OS_Report_History.csv");
 
-                                using StreamWriter sw = new(folderPath + "\\ WHT_OS_Report.csv");
+                                using StreamWriter sw = new(folderPath + "\\WHT_OS_Report.csv");
 
                                 sw.WriteLine("Operating System, Architecture, Up-time (Days:Hours:Minutes:Seconds)");
 
@@ -184,7 +189,7 @@ namespace WinFormsApp1
 
                             else
                             {
-                                using StreamWriter sw = new(folderPath + "\\ WHT_OS_Report.csv");
+                                using StreamWriter sw = new(folderPath + "\\WHT_OS_Report.csv");
 
                                 sw.WriteLine("Operating System, Architecture, Up-time (Days:Hours:Minutes:Seconds)");
 
@@ -194,7 +199,7 @@ namespace WinFormsApp1
                             // let the user know it has been successful
 
                             Outbox.Text += "OS info scan complete";
-                        }                        
+                        }
                     }
                 }
             }
@@ -208,7 +213,7 @@ namespace WinFormsApp1
             }
         }
 
-private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             // clear text 
             Outbox.Clear();
@@ -312,6 +317,101 @@ private void button2_Click(object sender, EventArgs e)
             else
             {
                 // cancel
+            }
+        }
+
+        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        {
+            string output;
+            string sfile2 = @"C:\Users\Liam_\Desktop\Dissertation\psuser.ps1";
+            string ps = @"C:\Users\Liam_\Desktop\Dissertation\" + "\\psout.csv";
+            
+
+
+            output = RunScript(sfile2);
+
+            using StreamWriter sw = new(ps);
+
+            sw.Write(output);
+
+            sw.Close();
+
+            var reader = new StreamReader(ps);
+
+            // want to remove first few lines to allow a choice what to add or remove etc
+            int linesremove = 3;
+            var fulltext = reader.ReadToEnd();
+            string[] lines = fulltext.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string outlines = string.Join("\n", lines.Skip(linesremove));
+            reader.Close();
+
+            var newlines = outlines.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<string> correctlines = new List<string>();
+            foreach (string line in newlines)
+            {
+                string togetrid = "False";
+                if (!line.Contains(togetrid))
+                {
+                    correctlines.Add(line.Trim());
+                }
+            }
+
+            if (correctlines.Count > 0)
+            {
+                correctlines.RemoveAll(line => string.IsNullOrWhiteSpace(line));
+
+                // Display a list of the correct lines and allow the user to select one or more
+                var selectedLines = MessageBox.Show($"Here is a list of current users:\n\n{string.Join("\n", correctlines)}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account.", "Current Users", MessageBoxButtons.OKCancel);
+
+                if (selectedLines == DialogResult.OK)
+                {
+                    // User clicked OK, so keep the selected lines
+                    List<string> selectedUsernames = new List<string>();
+
+                    foreach (string line in correctlines)
+                    {
+                        DialogResult result = MessageBox.Show($"Select which user(s) you want to keep:\n\n{line}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account. We will then check those that are kept meet requirements.", "Confirmation", MessageBoxButtons.YesNoCancel);
+                        if (result == DialogResult.Yes)
+                        {
+                            var userword = line.Split()[0].Trim();
+
+                            string sfile5 = $"Get-LocalUser -Name {userword} | Select-Object PasswordLastSet, PasswordExpires, PasswordRequired, PasswordChangeable, PasswordComplexity";
+                            Outbox.Text += RunScript(sfile5);
+
+                            selectedUsernames.Add(line);
+                        }
+                        else if (result == DialogResult.No)
+                        {
+                            var userword = line.Split()[0].Trim();
+
+                            using (var searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_UserAccount WHERE Name='{userword}'"))
+                            {
+                                 
+                                foreach (ManagementObject user in searcher.Get())
+                                {
+                                    string? username = user["Name"].ToString();
+                                    string sfile3 = $"Remove-LocalUser -Name {username} -ErrorAction Stop";
+                                    RunScript(sfile3);
+                                    Outbox.Text += "Sucessfully Deleted User: " + username;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // cancel
+
+                        }
+                    }
+                }
+                else
+                {
+                    // User clicked Cancel, so do nothing
+                }
+            }
+            else
+            {
+                // There are no correct lines, so do nothing
             }
         }
     }
