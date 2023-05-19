@@ -36,18 +36,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.Level1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTextBox3 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTextBox6 = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripTextBox4 = new System.Windows.Forms.ToolStripTextBox();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTextBox5 = new System.Windows.Forms.ToolStripTextBox();
@@ -132,72 +125,6 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Automated Script -";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(40, 73);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(172, 36);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Get-Process";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.Visible = false;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(40, 115);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(194, 36);
-            this.checkBox2.TabIndex = 9;
-            this.checkBox2.Text = "Get-LocalUser";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.Visible = false;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(40, 157);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(159, 36);
-            this.checkBox3.TabIndex = 10;
-            this.checkBox3.Text = "checkBox3";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.Visible = false;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(40, 199);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(159, 36);
-            this.checkBox4.TabIndex = 11;
-            this.checkBox4.Text = "checkBox4";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.Visible = false;
-            // 
-            // checkBox5
-            // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(40, 241);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(159, 36);
-            this.checkBox5.TabIndex = 12;
-            this.checkBox5.Text = "checkBox5";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.Visible = false;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(40, 283);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(249, 39);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "Run Selected Script";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.DarkGray;
@@ -216,8 +143,7 @@
             this.Level1ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBox1,
             this.toolStripTextBox3,
-            this.toolStripTextBox6,
-            this.toolStripTextBox4});
+            this.toolStripTextBox6});
             this.Level1ToolStripMenuItem.Name = "Level1ToolStripMenuItem";
             this.Level1ToolStripMenuItem.Size = new System.Drawing.Size(251, 36);
             this.Level1ToolStripMenuItem.Text = "Configuration Menu";
@@ -244,14 +170,6 @@
             this.toolStripTextBox6.Size = new System.Drawing.Size(300, 39);
             this.toolStripTextBox6.Text = "Windows Security Baseline";
             this.toolStripTextBox6.Click += new System.EventHandler(this.toolStripTextBox6_Click);
-            // 
-            // toolStripTextBox4
-            // 
-            this.toolStripTextBox4.Name = "toolStripTextBox4";
-            this.toolStripTextBox4.ReadOnly = true;
-            this.toolStripTextBox4.Size = new System.Drawing.Size(300, 39);
-            this.toolStripTextBox4.Text = "Advanced Options";
-            this.toolStripTextBox4.Click += new System.EventHandler(this.toolStripTextBox4_Click);
             // 
             // infoToolStripMenuItem
             // 
@@ -322,12 +240,6 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.autooutbox);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.checkBox5);
-            this.Controls.Add(this.checkBox4);
-            this.Controls.Add(this.checkBox3);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
@@ -357,12 +269,6 @@
         private Button button1;
         private Label label1;
         private Label label2;
-        private CheckBox checkBox1;
-        private CheckBox checkBox2;
-        private CheckBox checkBox3;
-        private CheckBox checkBox4;
-        private CheckBox checkBox5;
-        private Button button3;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem Level1ToolStripMenuItem;
         private ToolStripTextBox toolStripTextBox1;
@@ -372,7 +278,6 @@
         private ToolStripTextBox toolStripTextBox2;
         private ToolStripTextBox toolStripTextBox3;
         private Button button2;
-        private ToolStripTextBox toolStripTextBox4;
         private ToolStripTextBox toolStripTextBox5;
         private ToolStripTextBox toolStripTextBox6;
     }

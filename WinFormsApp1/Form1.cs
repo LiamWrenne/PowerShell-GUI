@@ -104,48 +104,6 @@ namespace WinFormsApp1
             WHT.WriteEntry("Automatic Scripting Disengaged", EventLogEntryType.Information);
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            // test file to test file scripting capabillties
-
-            string sfile = @"C:\Users\Liam_\Desktop\Dissertation\ps.ps1";
-            string sfile2 = @"C:\Users\Liam_\Desktop\Dissertation\psuser.ps1";
-
-            // checking if the tickboxes are checked
-
-            object cb1 = checkBox1.CheckState;
-            object cb2 = checkBox2.CheckState;
-            object cb3 = checkBox3.CheckState;
-            object cb4 = checkBox4.CheckState;
-            object cb5 = checkBox5.CheckState;
-
-            // if they are ticked run associated file 
-
-            if (Convert.ToString(cb1) == "Checked")
-            {
-                Outbox.Text += RunScript(sfile);
-            }
-            if (Convert.ToString(cb2) == "Checked")
-            {
-                Outbox.Text += RunScript(sfile2);
-            }
-
-            // to add more .ps1 files
-
-            if (Convert.ToString(cb3) == "Checked")
-            {
-
-            }
-            if (Convert.ToString(cb4) == "Checked")
-            {
-
-            }
-            if (Convert.ToString(cb5) == "Checked")
-            {
-
-            }
-        }
-
         private void toolStripTextBox2_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Do you want to use this tool to collect info, this will be stored locally", "Confirmation", MessageBoxButtons.YesNoCancel);
@@ -199,6 +157,12 @@ namespace WinFormsApp1
                             // let the user know it has been successful
 
                             Outbox.Text += "OS info scan complete";
+
+                            EventLog WHT = new("WHT")
+                            {
+                                Source = "Windows Hardening Tool"
+                            };
+                            WHT.WriteEntry("OS info scan complete", EventLogEntryType.Information);
                         }
                     }
                 }
@@ -217,18 +181,6 @@ namespace WinFormsApp1
         {
             // clear text 
             Outbox.Clear();
-        }
-
-        private void toolStripTextBox4_Click(object sender, EventArgs e)
-        {
-            // advanced options
-
-            checkBox1.Visible = true;
-            checkBox2.Visible = true;
-            checkBox3.Visible = true;
-            checkBox4.Visible = true;
-            checkBox5.Visible = true;
-            button3.Visible = true;
         }
 
         private void toolStripTextBox5_Click(object sender, EventArgs e)
@@ -280,6 +232,12 @@ namespace WinFormsApp1
                                 sw.WriteLine(sysman + "," + mod + "," + name + "," + systype);
                             }
                             Outbox.Text += "System info scan complete";
+
+                            EventLog WHT = new("WHT")
+                            {
+                                Source = "Windows Hardening Tool"
+                            };
+                            WHT.WriteEntry("System info scan complete", EventLogEntryType.Information);
                         }
                     }
                 }
@@ -319,34 +277,31 @@ namespace WinFormsApp1
                 // cancel
             }
         }
-        //
+        
         private void toolStripTextBox1_Click(object sender, EventArgs e)
         {
-            string output;
+            // Set the file paths for the PowerShell script and the output CSV file
             string sfile2 = @"C:\Users\Liam_\Desktop\Dissertation\psuser.ps1";
             string ps = @"C:\Users\Liam_\Desktop\Dissertation\" + "\\psout.csv";
-            
 
+            // Run the PowerShell script and capture the output
+            string output = RunScript(sfile2);
 
-            output = RunScript(sfile2);
-
+            // Write the output to the CSV file
             using StreamWriter sw = new(ps);
-
             sw.Write(output);
-
             sw.Close();
 
-            var reader = new StreamReader(ps);
-
-            // want to remove first few lines to allow a choice what to add or remove etc
+            // Read the CSV file and remove the first few lines
             int linesremove = 3;
+            var reader = new StreamReader(ps);
             var fulltext = reader.ReadToEnd();
             string[] lines = fulltext.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             string outlines = string.Join("\n", lines.Skip(linesremove));
             reader.Close();
 
+            // Process the remaining lines and filter out lines containing "False"
             var newlines = outlines.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
             List<string> correctlines = new List<string>();
             foreach (string line in newlines)
             {
@@ -357,37 +312,42 @@ namespace WinFormsApp1
                 }
             }
 
+            // Check if there are any correct lines
             if (correctlines.Count > 0)
             {
+                // Remove empty lines from the list of correct lines
                 correctlines.RemoveAll(line => string.IsNullOrWhiteSpace(line));
 
-                // Display a list of the correct lines and allow the user to select one or more
+                // Display the list of correct lines and allow the user to select one or more
                 var selectedLines = MessageBox.Show($"Here is a list of current users:\n\n{string.Join("\n", correctlines)}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account.", "Current Users", MessageBoxButtons.OKCancel);
 
+                // Process the selected lines
                 if (selectedLines == DialogResult.OK)
                 {
                     // User clicked OK, so keep the selected lines
                     List<string> selectedUsernames = new List<string>();
-
                     foreach (string line in correctlines)
                     {
+                        // Prompt the user to confirm whether to keep or remove the user
                         DialogResult result = MessageBox.Show($"Select which user(s) you want to keep:\n\n{line}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account. We will then check those that are kept meet requirements.", "Confirmation", MessageBoxButtons.YesNoCancel);
+
                         if (result == DialogResult.Yes)
                         {
+                            // Get information about the selected user using PowerShell
                             var userword = line.Split()[0].Trim();
-
                             string sfile5 = $"Get-LocalUser -Name {userword} | Select-Object PasswordLastSet, PasswordExpires, PasswordRequired, PasswordChangeable, PasswordComplexity";
+                            Outbox.Text = $"Here is some info on this account: {userword} ";
                             Outbox.Text += RunScript(sfile5);
 
+                            // Add the selected line to the list of selected usernames
                             selectedUsernames.Add(line);
                         }
                         else if (result == DialogResult.No)
-                        {
+                        {                            
+                            // Remove the user using PowerShell
                             var userword = line.Split()[0].Trim();
-
                             using (var searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_UserAccount WHERE Name='{userword}'"))
                             {
-                                 
                                 foreach (ManagementObject user in searcher.Get())
                                 {
                                     string? username = user["Name"].ToString();
@@ -400,19 +360,42 @@ namespace WinFormsApp1
                         else
                         {
                             // cancel
-
                         }
                     }
                 }
                 else
                 {
-                    // User clicked Cancel, so do nothing
+                    // cancel
                 }
             }
             else
             {
-                // There are no correct lines, so do nothing
+                // no correct lines, cancel
             }
+            
+            DialogResult results = MessageBox.Show($"Would you like to De-bloat your machine? This will unistall various unesseray applications from your device. (Recommended to use on a new device as other apps may be unistalled.)", "Confirmation", MessageBoxButtons.YesNoCancel);
+            
+            if (results == DialogResult.Yes)
+            {
+                string bloatpath = "C:/Users/Liam_/Desktop/Dissertation/ps.ps1";
+                Outbox.Text += RunScript(bloatpath);
+            }
+            else if (results == DialogResult.No)
+            {
+                // cancel
+            }
+            else
+            {
+                // cancel
+            }
+
+            Outbox.Text += "Cyber Essenetials Hardening Complete!";
+
+            EventLog WHT = new("WHT")
+            {
+                Source = "Windows Hardening Tool"
+            };
+            WHT.WriteEntry("Cyber Essenetials Hardening Complete!", EventLogEntryType.Information);
         }
     }
 }
