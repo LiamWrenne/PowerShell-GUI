@@ -161,14 +161,14 @@
             this.toolStripTextBox3.Name = "toolStripTextBox3";
             this.toolStripTextBox3.ReadOnly = true;
             this.toolStripTextBox3.Size = new System.Drawing.Size(300, 39);
-            this.toolStripTextBox3.Text = "IASME Governance ";
+            this.toolStripTextBox3.Text = "(Beta) IASME Assurance ";
             // 
             // toolStripTextBox6
             // 
             this.toolStripTextBox6.BackColor = System.Drawing.SystemColors.Control;
             this.toolStripTextBox6.Name = "toolStripTextBox6";
             this.toolStripTextBox6.Size = new System.Drawing.Size(300, 39);
-            this.toolStripTextBox6.Text = "Windows Security Baseline";
+            this.toolStripTextBox6.Text = "(Beta) Windows Baseline";
             this.toolStripTextBox6.Click += new System.EventHandler(this.toolStripTextBox6_Click);
             // 
             // infoToolStripMenuItem
@@ -178,8 +178,8 @@
             this.toolStripTextBox2,
             this.toolStripTextBox5});
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(307, 36);
-            this.infoToolStripMenuItem.Text = "Infonformation Gathering";
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(271, 36);
+            this.infoToolStripMenuItem.Text = "Information Gathering";
             // 
             // toolStripTextBox2
             // 

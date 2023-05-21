@@ -277,83 +277,101 @@ namespace WinFormsApp1
                 // cancel
             }
         }
-        
+
         private void toolStripTextBox1_Click(object sender, EventArgs e)
         {
-            // Set the file paths for the PowerShell script and the output CSV file
-            string sfile2 = @"C:\Users\Liam_\Desktop\Dissertation\psuser.ps1";
-            string ps = @"C:\Users\Liam_\Desktop\Dissertation\" + "\\psout.csv";
+            DialogResult firstresult = MessageBox.Show("Please select the folder path where the PowerShell Scripts is stored", "Confirmation", MessageBoxButtons.YesNoCancel);
 
-            // Run the PowerShell script and capture the output
-            string output = RunScript(sfile2);
-
-            // Write the output to the CSV file
-            using StreamWriter sw = new(ps);
-            sw.Write(output);
-            sw.Close();
-
-            // Read the CSV file and remove the first few lines
-            int linesremove = 3;
-            var reader = new StreamReader(ps);
-            var fulltext = reader.ReadToEnd();
-            string[] lines = fulltext.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            string outlines = string.Join("\n", lines.Skip(linesremove));
-            reader.Close();
-
-            // Process the remaining lines and filter out lines containing "False"
-            var newlines = outlines.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            List<string> correctlines = new List<string>();
-            foreach (string line in newlines)
+            if (firstresult == DialogResult.Yes)
             {
-                string togetrid = "False";
-                if (!line.Contains(togetrid))
+                FolderBrowserDialog folderBrowserDialog = new();
+
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    correctlines.Add(line.Trim());
-                }
-            }
+                    // get folder path
 
-            // Check if there are any correct lines
-            if (correctlines.Count > 0)
-            {
-                // Remove empty lines from the list of correct lines
-                correctlines.RemoveAll(line => string.IsNullOrWhiteSpace(line));
+                    string folderPath = folderBrowserDialog.SelectedPath;
 
-                // Display the list of correct lines and allow the user to select one or more
-                var selectedLines = MessageBox.Show($"Here is a list of current users:\n\n{string.Join("\n", correctlines)}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account.", "Current Users", MessageBoxButtons.OKCancel);
+                    // Set the file paths for the PowerShell script and the output CSV file
+                    string sfile2 = folderPath + "/psuser.ps1";
+                    string ps = folderPath + "/psout.csv";
 
-                // Process the selected lines
-                if (selectedLines == DialogResult.OK)
-                {
-                    // User clicked OK, so keep the selected lines
-                    List<string> selectedUsernames = new List<string>();
-                    foreach (string line in correctlines)
+                    // Run the PowerShell script and capture the output
+                    string output = RunScript(sfile2);
+
+                    // Write the output to the CSV file
+                    using StreamWriter sw = new(ps);
+                    sw.Write(output);
+                    sw.Close();
+
+                    // Read the CSV file and remove the first few lines
+                    int linesremove = 3;
+                    var reader = new StreamReader(ps);
+                    var fulltext = reader.ReadToEnd();
+                    string[] lines = fulltext.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    string outlines = string.Join("\n", lines.Skip(linesremove));
+                    reader.Close();
+
+                    // Process the remaining lines and filter out lines containing "False"
+                    var newlines = outlines.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    List<string> correctlines = new List<string>();
+                    foreach (string line in newlines)
                     {
-                        // Prompt the user to confirm whether to keep or remove the user
-                        DialogResult result = MessageBox.Show($"Select which user(s) you want to keep:\n\n{line}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account. We will then check those that are kept meet requirements.", "Confirmation", MessageBoxButtons.YesNoCancel);
-
-                        if (result == DialogResult.Yes)
+                        string togetrid = "False";
+                        if (!line.Contains(togetrid))
                         {
-                            // Get information about the selected user using PowerShell
-                            var userword = line.Split()[0].Trim();
-                            string sfile5 = $"Get-LocalUser -Name {userword} | Select-Object PasswordLastSet, PasswordExpires, PasswordRequired, PasswordChangeable, PasswordComplexity";
-                            Outbox.Text = $"Here is some info on this account: {userword} ";
-                            Outbox.Text += RunScript(sfile5);
-
-                            // Add the selected line to the list of selected usernames
-                            selectedUsernames.Add(line);
+                            correctlines.Add(line.Trim());
                         }
-                        else if (result == DialogResult.No)
-                        {                            
-                            // Remove the user using PowerShell
-                            var userword = line.Split()[0].Trim();
-                            using (var searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_UserAccount WHERE Name='{userword}'"))
+                    }
+
+                    // Check if there are any correct lines
+                    if (correctlines.Count > 0)
+                    {
+                        // Remove empty lines from the list of correct lines
+                        correctlines.RemoveAll(line => string.IsNullOrWhiteSpace(line));
+
+                        // Display the list of correct lines and allow the user to select one or more
+                        var selectedLines = MessageBox.Show($"Here is a list of current users:\n\n{string.Join("\n", correctlines)}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account.", "Current Users", MessageBoxButtons.OKCancel);
+
+                        // Process the selected lines
+                        if (selectedLines == DialogResult.OK)
+                        {
+                            // User clicked OK, so keep the selected lines
+                            List<string> selectedUsernames = new List<string>();
+                            foreach (string line in correctlines)
                             {
-                                foreach (ManagementObject user in searcher.Get())
+                                // Prompt the user to confirm whether to keep or remove the user
+                                DialogResult result = MessageBox.Show($"Select which user(s) you want to keep:\n\n{line}\n\nIt is recommended to only have the required users typically an Admin account and a standard user account. We will then check those that are kept meet requirements.", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+                                if (result == DialogResult.Yes)
                                 {
-                                    string? username = user["Name"].ToString();
-                                    string sfile3 = $"Remove-LocalUser -Name {username} -ErrorAction Stop";
-                                    RunScript(sfile3);
-                                    Outbox.Text += "Sucessfully Deleted User: " + username;
+                                    // Get information about the selected user using PowerShell
+                                    var userword = line.Split()[0].Trim();
+                                    string sfile5 = $"Get-LocalUser -Name {userword} | Select-Object PasswordLastSet, PasswordExpires, PasswordRequired, PasswordChangeable, PasswordComplexity";
+                                    Outbox.Text = $"Here is some info on this account: {userword} ";
+                                    Outbox.Text += RunScript(sfile5);
+
+                                    // Add the selected line to the list of selected usernames
+                                    selectedUsernames.Add(line);
+                                }
+                                else if (result == DialogResult.No)
+                                {
+                                    // Remove the user using PowerShell
+                                    var userword = line.Split()[0].Trim();
+                                    using (var searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_UserAccount WHERE Name='{userword}'"))
+                                    {
+                                        foreach (ManagementObject user in searcher.Get())
+                                        {
+                                            string? username = user["Name"].ToString();
+                                            string sfile3 = $"Remove-LocalUser -Name {username} -ErrorAction Stop";
+                                            RunScript(sfile3);
+                                            Outbox.Text += "Sucessfully Deleted User: " + username;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // cancel
                                 }
                             }
                         }
@@ -362,40 +380,54 @@ namespace WinFormsApp1
                             // cancel
                         }
                     }
-                }
-                else
-                {
-                    // cancel
-                }
-            }
-            else
-            {
-                // no correct lines, cancel
-            }
-            
-            DialogResult results = MessageBox.Show($"Would you like to De-bloat your machine? This will unistall various unesseray applications from your device. (Recommended to use on a new device as other apps may be unistalled.)", "Confirmation", MessageBoxButtons.YesNoCancel);
-            
-            if (results == DialogResult.Yes)
-            {
-                string bloatpath = "C:/Users/Liam_/Desktop/Dissertation/ps.ps1";
-                Outbox.Text += RunScript(bloatpath);
-            }
-            else if (results == DialogResult.No)
-            {
-                // cancel
-            }
-            else
-            {
-                // cancel
-            }
+                    else
+                    {
+                        // no correct lines, cancel
+                    }
 
-            Outbox.Text += "Cyber Essenetials Hardening Complete!";
+                    DialogResult results = MessageBox.Show($"Would you like to De-bloat your machine? This will unistall various unesseray applications from your device. (Recommended to use on a new device as other apps may be unistalled.)", "Confirmation", MessageBoxButtons.YesNoCancel);
 
-            EventLog WHT = new("WHT")
-            {
-                Source = "Windows Hardening Tool"
-            };
-            WHT.WriteEntry("Cyber Essenetials Hardening Complete!", EventLogEntryType.Information);
+                    if (results == DialogResult.Yes)
+                    {
+                        string bloatpath = folderPath + "/ps.ps1";
+                        Outbox.Text += RunScript(bloatpath);
+                    }
+                    else if (results == DialogResult.No)
+                    {
+                        // cancel
+                    }
+                    else
+                    {
+                        // cancel
+                    }
+
+                    DialogResult lastresult = MessageBox.Show("Would you like to disable autorun features?", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+                    if (results == DialogResult.Yes)
+                    {
+                        string autorun = folderPath + "/autorun.ps1/";
+                        Outbox.Text += RunScript(autorun);
+                    }
+                    else if (results == DialogResult.No)
+                    {
+                        // cancel
+                    }
+                    else
+                    {
+                        // cancel
+                    }
+
+                    Outbox.Text += "Cyber Essenetials Hardening Complete!";
+
+                    EventLog WHT = new("WHT")
+                    {
+                        Source = "Windows Hardening Tool"
+                    };
+                    WHT.WriteEntry("Cyber Essenetials Hardening Complete!", EventLogEntryType.Information);
+
+
+                }
+            }
         }
     }
 }
